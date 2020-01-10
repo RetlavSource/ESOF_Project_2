@@ -1,4 +1,4 @@
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/RetlavSource/ESOF_Projecto_2?color=green&include_prereleases&label=%C3%BAltima%20vers%C3%A3o&style=plastic)](https://github.com/RetlavSource/ESOF_Project_2/releases)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/RetlavSource/ESOF_Project_2?color=green&include_prereleases&label=ultima%20vers%C3%A3o&style=plastic)
 
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/RetlavSource/ESOF_Projecto?color=green&include_prereleases&label=%C3%BAltima%20vers%C3%A3o%20do%20ESOF_Poject&style=plastic)](https://github.com/RetlavSource/ESOF_Project/releases)
 
