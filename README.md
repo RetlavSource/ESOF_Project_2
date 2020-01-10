@@ -1,33 +1,26 @@
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/RetlavSource/ESOF_Projecto?color=green&include_prereleases&label=%C3%BAltima%20vers%C3%A3o&style=plastic)](https://github.com/RetlavSource/ESOF_Project/releases)
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/RetlavSource/ESOF_Projecto_2?color=green&include_prereleases&label=%C3%BAltima%20vers%C3%A3o&style=plastic)](https://github.com/RetlavSource/ESOF_Project_2/releases)
 
-# Projeto Prático de Engenharia de Software
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/RetlavSource/ESOF_Projecto?color=green&include_prereleases&label=%C3%BAltima%20vers%C3%A3o%20do%20ESOF_Poject&style=plastic)](https://github.com/RetlavSource/ESOF_Project/releases)
 
-Este é um projeto prático para a disciplina de  ***Engenharia de Software*** na ***Universidade Fernando Pessoa***.
+# Web Service para o Projeto Prático de Engenharia de Software
+
+Este é o completento do projeto prático [*`ESOF_Project`*](https://github.com/RetlavSource/ESOF_Project) para a disciplina de  ***Engenharia de Software*** na ***Universidade Fernando Pessoa***, representando um Web Service (Faculdades) que comunica com *`ESOF_Project`*.
 
 ## Endpoints utilizados
 *   **GET**
-    *   /cadeira -- *`lista todas as cadeiras`*
-    *   /cadeira/1 -- *`lista a cadeira com o id=1`*
-    *   /atendimento -- *`lista todos os atendimentos`*
-    *   /atendimento/1 -- *`lista o atendimento com o id=1`*
-    *   /curso -- *`lista todos os cursos`*
-    *   /curso/1 -- *`lista o curso com o id=1`*
+    *   /explicador/{universidade} -- *`lista todos os explicadores da {universidade}`*
+    *   /explicador/{nome}/{universidade} -- *`lista o explicador com o {nome} da {universidade}`*
 
 *   **POST**
-    *   /cadeira -- *`cria uma cadeira`*
-    *   /cadeira/{curso} -- *`cria uma cadeira no curso com o id={curso} ou nome={curso}`*
-    *   /atendimento -- *`cria um atendimento`*
-    *   /curso/{faculdade} -- *`cria um curso na faculdade com id={faculdade} ou nome={faculdade}`*
+    *   /explicador/{universidade} -- *`cria um explicador na {universidade} (info do explicador no payload)`*
 
 *   **PUT**
-    *   /cadeira/1 -- *`modifica a cadeira com o id=1`*
-    *   /atendimento/1 -- *`modifica o atendimento com o id=1`*
-    *   /curso/1 -- *`modifica o curso com o id=1`*
+    *   /explicador -- *`define a disponibilidade do explicador (itera pelas faculdades à procura)(info do explicador no payload)`*
+    *   /explicador/{universidade}/{curso} -- *`atribui um curso a um explicador da {universidade} (info do explicador no payload)`*
+    *   /explicador/{universidade} -- *`modifica o explicador da {universidade} (info do explicador no payload)`*
     
 *   **DELETE**
-    *   /cadeira/1 -- *`remove a cadeira com o id=1`*
-    *   /atendimento/1 -- *`remove o atendimento com o id=1`*
-    *   /curso/1 -- *`remove o curso com o id=1`*
+    *   /explicador/{universidade} -- *`remove o explicador da {universidade} (info do explicador no payload)`*
 
 ## Documentação de referência
 Documentação utilizada na realização do projeto:
