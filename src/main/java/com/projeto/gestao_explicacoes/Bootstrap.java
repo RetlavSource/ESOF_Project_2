@@ -32,9 +32,10 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
     private IdiomaRepo idiomaRepo;
     private HorarioRepo horarioRepo;
     private AtendimentoRepo atendimentoRepo;
+    private UniversidadeRepo universidadeRepo;
 
     @Autowired
-    public Bootstrap(FaculdadeRepo faculdadeRepo, CursoRepo cursoRepo, CadeiraRepo cadeiraRepo, AlunoRepo alunoRepo, ExplicadorRepo explicadorRepo, IdiomaRepo idiomaRepo, HorarioRepo horarioRepo, AtendimentoRepo atendimentoRepo) {
+    public Bootstrap(FaculdadeRepo faculdadeRepo, CursoRepo cursoRepo, CadeiraRepo cadeiraRepo, AlunoRepo alunoRepo, ExplicadorRepo explicadorRepo, IdiomaRepo idiomaRepo, HorarioRepo horarioRepo, AtendimentoRepo atendimentoRepo, UniversidadeRepo universidadeRepo) {
         this.faculdadeRepo = faculdadeRepo;
         this.cursoRepo = cursoRepo;
         this.cadeiraRepo = cadeiraRepo;
@@ -43,6 +44,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         this.idiomaRepo = idiomaRepo;
         this.horarioRepo = horarioRepo;
         this.atendimentoRepo = atendimentoRepo;
+        this.universidadeRepo = universidadeRepo;
     }
 
 
@@ -57,6 +59,8 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         //novosDados();     // server.port=8081
         //novosDadosWS11();   // server.port=8082
         //novosDadosWS12(); // server.port=8083
+
+        dadosWS2();
     }
 
     private void allTestes() {
@@ -101,6 +105,18 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         sb.append(mapping.get(uni)).append("/explicador");
 
         System.out.println(sb.toString());
+
+    }
+
+    private void dadosWS2() {
+
+        Universidade ufp = new Universidade("ufp", "http://127.0.0.1:8081");
+        Universidade ws11 = new Universidade("ws11", "http://127.0.0.1:8082");
+        Universidade ws12 = new Universidade("ws12", "http://127.0.0.1:8083");
+
+        this.universidadeRepo.save(ufp);
+        this.universidadeRepo.save(ws11);
+        this.universidadeRepo.save(ws12);
 
     }
 
