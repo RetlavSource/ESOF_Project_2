@@ -38,35 +38,41 @@ public class ExplicadorController {
         return ResponseEntity.ok(this.explicadorService.findAll());
     }
 
+//    @GetMapping(value = "/{universidade}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Set<Explicador>> getExplicadoresUniversidade(@PathVariable("universidade") String nomeUniversidade) {
+//        this.logger.info("Recebido um pedido GET para /{universidade}");
+//
+//        return ResponseEntity.ok(this.explicadorService.findExplicadorByUniversidade(nomeUniversidade));
+//    }
+
     @GetMapping(value = "/{universidade}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Set<Explicador>> getExplicadoresUniversidade(@PathVariable("universidade") String nomeUniversidade) {
+    public ResponseEntity<Set<Explicador>> procuraDisponibilidadeExplicadoresUniversidade(@PathVariable("universidade") String nomeUniversidade, @RequestParam Map<String, String> parametros) {
         this.logger.info("Recebido um pedido GET para /{universidade}");
 
-        return ResponseEntity.ok(this.explicadorService.findExplicadorByUniversidade(nomeUniversidade));
-    }
-
-    @GetMapping(value = "/{universidade}/procura", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Set<Explicador>> procuraDisponibilidadeExplicadoresUniversidade(@PathVariable("universidade") String nomeUniversidade, @RequestParam Map<String, String> parametros) {
-        this.logger.info("Recebido um pedido GET para /{universidade}/procura");
+        System.out.println(parametros);
+        System.out.println(nomeUniversidade);
 
         String nomeCadeira = parametros.get("cadeira");
         String nomeIdioma = parametros.get("idioma");
         String diaSemana = parametros.get("dia");
         String horaInicio = parametros.get("inicio");
         String horaFim = parametros.get("fim");
-        if (nomeIdioma != null) {
+
+        if (nomeIdioma != null && !nomeIdioma.isEmpty()) {
             nomeIdioma = nomeIdioma.toUpperCase();
         }
+
         DayOfWeek dia = null;
-        if (diaSemana != null) {
+        if (diaSemana != null && !diaSemana.isEmpty()) {
             dia = DayOfWeek.valueOf(diaSemana.toUpperCase());
         }
+
         LocalTime timeInit = null;
         LocalTime timeEnd = null;
-        if (horaInicio != null) {
+        if (horaInicio != null && !horaInicio.isEmpty()) {
             timeInit = LocalTime.parse(horaInicio);
         }
-        if (horaFim != null) {
+        if (horaFim != null && !horaFim.isEmpty()) {
             timeEnd = LocalTime.parse(horaFim);
         }
 

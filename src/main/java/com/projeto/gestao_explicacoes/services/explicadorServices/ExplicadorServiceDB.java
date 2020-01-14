@@ -76,7 +76,7 @@ public class ExplicadorServiceDB implements ExplicadorService {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append(universidade.get().getUrl()).append("/explicador/procura").append("?");
+        sb.append(universidade.get().getUrl()).append("/explicador").append("?");
         sb.append("cadeira=").append(filterObjectExplicador.getNomeCadeira());
         sb.append("&");
         sb.append("idioma=").append(filterObjectExplicador.getNomeIdioma());
@@ -88,6 +88,9 @@ public class ExplicadorServiceDB implements ExplicadorService {
         sb.append("fim=").append(filterObjectExplicador.getHoraInicio());
 
         String fullUrl = sb.toString();
+
+        System.out.println(fullUrl);
+
         ResponseEntity<Set> auxSetExplicadores = WebService.byGet(fullUrl, Set.class);
 
 
