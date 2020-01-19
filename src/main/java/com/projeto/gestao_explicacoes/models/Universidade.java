@@ -14,6 +14,16 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 public class Universidade extends BaseModel {
 
+    private String nome;
     private String sigla;
     private String url;
+    private String latitude;
+    private String longitude;
+    private String endereco;
+
+    public Universidade(String sigla, String url) {
+        this.sigla = sigla;
+        this.url = url;
+    }
+
 }

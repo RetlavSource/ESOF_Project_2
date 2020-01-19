@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -70,6 +69,7 @@ public class ExplicadorServiceDB implements ExplicadorService {
 
     @Override
     public Set procuraExplicadorDisponivelByUniversidade(FilterObjectExplicador filterObjectExplicador, String nomeUniversidade) {
+
         Optional<Universidade> universidade = this.universidadeRepo.findBySigla(nomeUniversidade);
         if (universidade.isEmpty()) {
             throw new FalhaCriarException("Não existe a faculdade pedida!!");
