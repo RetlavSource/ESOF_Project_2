@@ -61,11 +61,11 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         logger.info("Startup");
 
-        try {
-            allTestes();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            allTestes();
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
         //exemploEntradas();
         //testStringBuilder();
 
@@ -73,14 +73,15 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         //novosDadosWS11();   // server.port=8082
         //novosDadosWS12(); // server.port=8083
 
-        //dadosWS2();
+        dadosWS2();
     }
 
     private void allTestes() throws JsonProcessingException {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<List> openMaps = restTemplate.getForEntity("https://nominatim.openstreetmap.org/search.php?q=universidade+fernando+pessoa&format=json", List.class);
+        //ResponseEntity<List> openMaps = restTemplate.getForEntity("https://nominatim.openstreetmap.org/search.php?q=universidade+fernando+pessoa&format=json", List.class);
+        ResponseEntity<List> openMaps = WebService.byGet("https://nominatim.openstreetmap.org/search.php?q=universidade+fernando+pessoa&format=json", List.class);
 
         System.out.println(openMaps);
         System.out.println(openMaps.getBody());
@@ -88,7 +89,8 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
 
 
-        ResponseEntity<String> openMaps2 = restTemplate.getForEntity("https://nominatim.openstreetmap.org/search.php?q=universidade+fernando+pessoa&format=json", String.class);
+        //ResponseEntity<String> openMaps2 = restTemplate.getForEntity("https://nominatim.openstreetmap.org/search.php?q=universidade+fernando+pessoa&format=json", String.class);
+        ResponseEntity<String> openMaps2 = WebService.byGet("https://nominatim.openstreetmap.org/search.php?q=universidade+fernando+pessoa&format=json", String.class);
 
         System.out.println(openMaps2);
         System.out.println(openMaps2.getBody());
@@ -147,13 +149,47 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
     private void dadosWS2() {
 
-        Universidade ufp = new Universidade("ufp", "http://127.0.0.1:8081");
-        Universidade ws11 = new Universidade("ws11", "http://127.0.0.1:8082");
-        Universidade ws12 = new Universidade("ws12", "http://127.0.0.1:8083");
+        Universidade ufp = new Universidade("Universidade Fernando Pessoa", "ufp", "http://127.0.0.1:8081");
+        this.webAccessCompletaUniversidade(ufp);
+
+        Universidade ws11 = new Universidade("Faculdade de Arquitetura da Universidade do Porto", "ws11", "http://127.0.0.1:8082");
+        this.webAccessCompletaUniversidade(ws11);
+
+        Universidade ws12 = new Universidade("Faculdade de Engenharia da Universidade do Porto", "ws12", "http://127.0.0.1:8083");
+        this.webAccessCompletaUniversidade(ws12);
 
         this.universidadeRepo.save(ufp);
         this.universidadeRepo.save(ws11);
         this.universidadeRepo.save(ws12);
+
+    }
+
+    private void webAccessCompletaUniversidade(Universidade universidade) {
+
+        String openMapsURL = "https://nominatim.openstreetmap.org/search.php?q=";
+        String stringFormat = "&format=json";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(openMapsURL).append(universidade.getNome()).append(stringFormat);
+        ResponseEntity<String> universidadeMap = WebService.byGet(sb.toString(), String.class);
+        if (universidadeMap.getBody() == null) {
+            return;
+        }
+
+        ObjectMapper universidadeObjectMapper = new ObjectMapper();
+        universidadeObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        try {
+            List<OpenStreetMapper> universidadeObjects = universidadeObjectMapper.readValue(universidadeMap.getBody() , new TypeReference<List<OpenStreetMapper>>() {});
+            for (OpenStreetMapper openStreetMapper : universidadeObjects) {
+                if (openStreetMapper.getType().equals("university")) {
+                    openStreetMapper.completaUniversidade(universidade);
+                    break;
+                }
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
     }
 
