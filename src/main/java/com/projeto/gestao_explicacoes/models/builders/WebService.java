@@ -31,4 +31,13 @@ public class WebService {
         return restTemplate.postForEntity(url, payload, responseType);
 
     }
+
+    /*
+    public static void main(String[] args) {
+        ResponseEntity<String> googlePage=WebService.byGet("http://google.com",String.class);
+
+        System.out.println(googlePage.getBody());
+    }
+    */
+
 }

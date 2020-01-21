@@ -16,7 +16,11 @@ public class ExplicadorBuilder {
     private Set<Cadeira> cadeiras = new HashSet<>();
 
     public ExplicadorBuilder setNome(String nome) {
-        this.nome = nome;
+        if (nome != null) {
+            this.nome = nome;
+        } else {
+            this.nome = "";
+        }
         return this;
     }
 
@@ -26,7 +30,9 @@ public class ExplicadorBuilder {
     }
 
     public ExplicadorBuilder setHorario(Set<Horario> horario) {
-        this.horarios = horario;
+        if ( horario != null ) {
+            this.horarios = horario;
+        }
         return this;
     }
 
@@ -36,7 +42,9 @@ public class ExplicadorBuilder {
     }
 
     public ExplicadorBuilder setIdiomas(Set<Idioma> idiomas) {
-        this.idiomas = idiomas;
+        if ( idiomas != null ) {
+            this.idiomas = idiomas;
+        }
         return this;
     }
 
@@ -46,7 +54,9 @@ public class ExplicadorBuilder {
     }
 
     public ExplicadorBuilder setAtendimentos(Set<Atendimento> atendimentos) {
-        this.atendimentos = atendimentos;
+        if ( atendimentos != null ) {
+            this.atendimentos = atendimentos;
+        }
         return this;
     }
 
@@ -56,7 +66,9 @@ public class ExplicadorBuilder {
     }
 
     public ExplicadorBuilder setCadeiras(Set<Cadeira> cadeiras) {
-        this.cadeiras = cadeiras;
+        if ( cadeiras != null ) {
+            this.cadeiras = cadeiras;
+        }
         return this;
     }
 
@@ -67,37 +79,35 @@ public class ExplicadorBuilder {
 
     public Explicador build() throws FalhaCriarException{
 
-        Explicador explicador = new Explicador(nome, numero, horarios, idiomas, atendimentos, cadeiras);
-
-        if(nome == null){
-
+        if( this.nome == null || this.nome.isBlank() ){
             throw new FalhaCriarException("Argumento nome inválido ou inexistente!!");
         }
 
-        if(numero == null){
-
+        if( this.numero == null || this.numero == 0 ){
             throw new FalhaCriarException("Argumento numero inválido ou inexistente!!");
         }
 
-        if (horarios != null) {
+        Explicador explicador = new Explicador(nome, numero, horarios, idiomas, atendimentos, cadeiras);
+
+        if ( !this.horarios.isEmpty() ) {
             for (Horario horario: this.horarios) {
                 horario.setExplicador(explicador);
             }
         }
 
-        if (idiomas != null) {
+        if ( !this.idiomas.isEmpty() ) {
             for (Idioma idioma: this.idiomas) {
                 idioma.getExplicadores().add(explicador);
             }
         }
 
-        if (atendimentos != null) {
+        if ( !this.atendimentos.isEmpty() ) {
             for (Atendimento atendimento : this.atendimentos) {
                 atendimento.setExplicador(explicador);
             }
         }
 
-        if (cadeiras != null) {
+        if ( !this.cadeiras.isEmpty() ) {
             for (Cadeira cadeira: this.cadeiras) {
                 cadeira.getExplicadores().add(explicador);
             }
