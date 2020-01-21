@@ -1,20 +1,29 @@
 package com.projeto.gestao_explicacoes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projeto.gestao_explicacoes.models.*;
 import com.projeto.gestao_explicacoes.models.builders.AtendimentoBuilder;
 import com.projeto.gestao_explicacoes.models.builders.ExplicadorBuilder;
+import com.projeto.gestao_explicacoes.models.builders.WebService;
+import com.projeto.gestao_explicacoes.models.mappers.OpenStreetMapper;
 import com.projeto.gestao_explicacoes.repositories.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -52,7 +61,11 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         logger.info("Startup");
 
-        //allTestes();
+        try {
+            allTestes();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         //exemploEntradas();
         //testStringBuilder();
 
@@ -60,13 +73,37 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         //novosDadosWS11();   // server.port=8082
         //novosDadosWS12(); // server.port=8083
 
-        dadosWS2();
+        //dadosWS2();
     }
 
-    private void allTestes() {
+    private void allTestes() throws JsonProcessingException {
 
-        // Testes rápidos:
+        RestTemplate restTemplate = new RestTemplate();
 
+        ResponseEntity<List> openMaps = restTemplate.getForEntity("https://nominatim.openstreetmap.org/search.php?q=universidade+fernando+pessoa&format=json", List.class);
+
+        System.out.println(openMaps);
+        System.out.println(openMaps.getBody());
+        System.out.println("\n");
+
+
+
+        ResponseEntity<String> openMaps2 = restTemplate.getForEntity("https://nominatim.openstreetmap.org/search.php?q=universidade+fernando+pessoa&format=json", String.class);
+
+        System.out.println(openMaps2);
+        System.out.println(openMaps2.getBody());
+        System.out.println("\n");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        List<OpenStreetMapper> openObjects = objectMapper.readValue(openMaps2.getBody() , new TypeReference<List<OpenStreetMapper>>() {});
+        for (OpenStreetMapper openStreetMapper : openObjects) {
+            if (openStreetMapper.getType().equals("university")) {
+                System.out.println("Got the right one ->");
+                System.out .println(openStreetMapper);
+                break;
+            }
+        }
 
     }
 

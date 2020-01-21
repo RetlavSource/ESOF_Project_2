@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OpenStreetMapper {
 
-    private Integer place_id;
-    private Integer osm_id;
+    private Long place_id;
+    private Long osm_id;
     private String lat;
     private String lon;
     private String display_name;
