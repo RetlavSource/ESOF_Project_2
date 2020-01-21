@@ -150,13 +150,13 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
     private void dadosWS2() {
 
         Universidade ufp = new Universidade("Universidade Fernando Pessoa", "ufp", "http://127.0.0.1:8081");
-        this.webAccessCompletaUniversidade(ufp);
+        this.webAccessCompletaUniversidade(ufp, "university");
 
         Universidade ws11 = new Universidade("Faculdade de Arquitetura da Universidade do Porto", "ws11", "http://127.0.0.1:8082");
-        this.webAccessCompletaUniversidade(ws11);
+        this.webAccessCompletaUniversidade(ws11, "university");
 
         Universidade ws12 = new Universidade("Faculdade de Engenharia da Universidade do Porto", "ws12", "http://127.0.0.1:8083");
-        this.webAccessCompletaUniversidade(ws12);
+        this.webAccessCompletaUniversidade(ws12, "university");
 
         this.universidadeRepo.save(ufp);
         this.universidadeRepo.save(ws11);
@@ -164,7 +164,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
     }
 
-    private void webAccessCompletaUniversidade(Universidade universidade) {
+    private void webAccessCompletaUniversidade(Universidade universidade, String tipo) {
 
         String openMapsURL = "https://nominatim.openstreetmap.org/search.php?q=";
         String stringFormat = "&format=json";
@@ -182,12 +182,14 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         try {
             List<OpenStreetMapper> universidadeObjects = universidadeObjectMapper.readValue(universidadeMap.getBody() , new TypeReference<List<OpenStreetMapper>>() {});
             for (OpenStreetMapper openStreetMapper : universidadeObjects) {
-                if (openStreetMapper.getType().equals("university")) {
+                if (openStreetMapper.getType().equals(tipo)) {
                     openStreetMapper.completaUniversidade(universidade);
+                    this.logger.info("Dados sobre a faculdade adquiridos com sucesso!!");
                     break;
                 }
             }
         } catch (JsonProcessingException e) {
+            this.logger.info("Resultado dos dados sobre a faculdade sem sucesso!!");
             e.printStackTrace();
         }
 

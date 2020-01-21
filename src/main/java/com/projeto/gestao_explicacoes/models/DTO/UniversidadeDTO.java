@@ -26,6 +26,7 @@ public class UniversidadeDTO {
     private String url;
     private String latitude;
     private String longitude;
+    private String tipo;
     private String endereco;
     private ArrayList<String> direcao = new ArrayList<>();
 

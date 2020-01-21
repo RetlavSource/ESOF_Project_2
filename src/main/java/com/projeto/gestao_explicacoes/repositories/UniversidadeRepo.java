@@ -11,4 +11,6 @@ public interface UniversidadeRepo extends CrudRepository<Universidade, Long> {
 
     Optional<Universidade> findBySigla(String sigla);
 
+    Optional<Universidade> findByNome(String nome);
+
 }
