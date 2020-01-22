@@ -1,15 +1,17 @@
 package com.projeto.gestao_explicacoes.services.explicadorServices;
 
 import com.projeto.gestao_explicacoes.exceptions.FalhaCriarException;
-import com.projeto.gestao_explicacoes.models.Explicador;
+import com.projeto.gestao_explicacoes.models.DTO.ExplicadorDTO;
 import com.projeto.gestao_explicacoes.models.Universidade;
 import com.projeto.gestao_explicacoes.models.builders.WebService;
-import com.projeto.gestao_explicacoes.repositories.ExplicadorRepo;
 import com.projeto.gestao_explicacoes.repositories.UniversidadeRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Map;
 import java.util.Optional;
@@ -18,26 +20,38 @@ import java.util.Optional;
 @Profile(value = "db")
 public class ExplicadorServiceDB implements ExplicadorService {
 
-    private ExplicadorRepo explicadorRepo;
+    private Logger logger= LoggerFactory.getLogger(this.getClass());
+
     private UniversidadeRepo universidadeRepo;
 
     @Autowired
-    public ExplicadorServiceDB(ExplicadorRepo explicadorRepo, UniversidadeRepo universidadeRepo) {
-        this.explicadorRepo = explicadorRepo;
+    public ExplicadorServiceDB(UniversidadeRepo universidadeRepo) {
         this.universidadeRepo = universidadeRepo;
     }
 
     @Override
-    public Optional<Explicador> criarExplicador(Explicador explicador) {
+    public Optional<ExplicadorDTO> criarExplicadorUniversidade(ExplicadorDTO explicadorDTO, String nomeUniversidade) {
+        this.logger.info("No método: ExplicadorServiceDB -> criarExplicadorUniversidade()");
 
-        if(this.explicadorRepo.findByNumero(explicador.getNumero()).isPresent()){
-
-            return Optional.empty();
+        Optional<Universidade> universidade = this.universidadeRepo.findBySigla(nomeUniversidade);
+        if (universidade.isEmpty()) {
+            throw new FalhaCriarException("Não existe a universidade indicada!!");
         }
 
-        Explicador explicadorCriado = this.explicadorRepo.save(explicador);
+        StringBuilder sb = new StringBuilder();
+        sb.append(universidade.get().getUrl()).append("/explicador");
+        String fullUrl = sb.toString();
 
-        return Optional.of(explicadorCriado);
+        try {
+            ResponseEntity<ExplicadorDTO> auxExplicadorDTO = WebService.byPost(explicadorDTO, fullUrl, ExplicadorDTO.class);
+            System.out.println(auxExplicadorDTO.getBody());
+            this.logger.info("Explicador criado!!");
+            return Optional.ofNullable(auxExplicadorDTO.getBody());
+        } catch (HttpClientErrorException exc) {
+            this.logger.info("O explicador já existe!!");
+            throw new FalhaCriarException("O explicador já existe!!");
+        }
+
     }
 
     /**
@@ -49,13 +63,14 @@ public class ExplicadorServiceDB implements ExplicadorService {
      */
     @Override
     public String procuraExplicadoresUniversidade(Map<String, String> parametros, String nomeUniversidade) {
+        this.logger.info("No método: ExplicadorServiceDB -> procuraExplicadoresUniversidade()");
 
         System.out.println(parametros);
         System.out.println(nomeUniversidade);
 
         Optional<Universidade> universidade = this.universidadeRepo.findBySigla(nomeUniversidade);
         if (universidade.isEmpty()) {
-            throw new FalhaCriarException("Não existe a faculdade pedida!!");
+            throw new FalhaCriarException("Não existe a universidade indicada!!");
         }
 
         StringBuilder sb = new StringBuilder();

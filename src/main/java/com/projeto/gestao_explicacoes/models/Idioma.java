@@ -1,36 +1,27 @@
 package com.projeto.gestao_explicacoes.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Entity
 @NoArgsConstructor
 public class Idioma extends BaseModel{
 
   private String nome; // Nome do idioma em UpperCase
   private String sigla; // Sigla em UpperCase
 
-  @OneToMany(mappedBy = "idioma", cascade = CascadeType.PERSIST)
-  @JsonManagedReference
   private Set<Atendimento> atendimentos = new HashSet<>();
 
-  @ManyToMany(cascade = CascadeType.PERSIST)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  @JsonBackReference
+  @JsonIgnore
   private Set<Explicador> explicadores = new HashSet<>();
 
   // ****** METHODS ******

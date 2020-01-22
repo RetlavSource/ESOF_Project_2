@@ -7,22 +7,18 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Entity
 @NoArgsConstructor
 public class Faculdade extends BaseModel{
 
   private String nome;
 
-  @OneToMany(mappedBy = "faculdade", cascade = CascadeType.PERSIST)
   @ToString.Exclude
-  //@JsonManagedReference //Dá erro com esta anotação quando fazemos um POST
   @JsonIgnore
   private Set<Curso> cursos = new HashSet<>();
 

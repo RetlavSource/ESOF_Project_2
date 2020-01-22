@@ -6,28 +6,22 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Entity
 @NoArgsConstructor
 public class Aluno extends BaseModel{
 
   private String nome;
   private Integer numero;
 
-  @ManyToOne
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  //@JsonBackReference
   @JsonIgnore
   private Curso curso; // adicionado em "Curso"
 
-  @OneToMany(mappedBy = "aluno", cascade = CascadeType.PERSIST)
-  //@JsonManagedReference
   @JsonIgnore
   private Set<Atendimento> atendimentos = new HashSet<>();
 

@@ -6,13 +6,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Explicador extends BaseModel{
@@ -20,23 +18,15 @@ public class Explicador extends BaseModel{
   private String nome;
   private Integer numero;
 
-  @OneToMany(mappedBy = "explicador", cascade = CascadeType.PERSIST)
-  //@JsonManagedReference
   @JsonIgnore
   private Set<Horario> horarios = new HashSet<>();
 
-  @ManyToMany(mappedBy = "explicadores" , cascade = CascadeType.PERSIST)
-  //@JsonManagedReference
   @JsonIgnore
   private Set<Idioma> idiomas = new HashSet<>(); // tabela criada automaticamente
 
-  @OneToMany(mappedBy = "explicador", cascade = CascadeType.PERSIST)
-  //@JsonManagedReference
   @JsonIgnore
   private Set<Atendimento> atendimentos = new HashSet<>();
 
-  @ManyToMany(mappedBy = "explicadores", cascade = CascadeType.PERSIST)
-  //@JsonManagedReference
   @JsonIgnore
   private Set<Cadeira> cadeiras = new HashSet<>();
 

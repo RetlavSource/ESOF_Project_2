@@ -1,7 +1,7 @@
 package com.projeto.gestao_explicacoes.controllers;
 
 import com.projeto.gestao_explicacoes.exceptions.FalhaCriarException;
-import com.projeto.gestao_explicacoes.models.Explicador;
+import com.projeto.gestao_explicacoes.models.DTO.ExplicadorDTO;
 import com.projeto.gestao_explicacoes.services.explicadorServices.ExplicadorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,18 +42,16 @@ public class ExplicadorController {
         return ResponseEntity.ok(this.explicadorService.procuraExplicadoresUniversidade(parametros, nomeUniversidade));
     }
 
-    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Explicador> createExplicador(@RequestBody Explicador explicador){
+    @PostMapping(value = "/{universidade}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ExplicadorDTO> createExplicadorUniversidade(@RequestBody ExplicadorDTO explicadorDTO, @PathVariable("universidade") String nomeUniversidade){
+        this.logger.info("Recebido um pedido POST em createExplicadorUniversidade()");
 
-        this.logger.info("Recebido um pedido POST");
-
-        Optional<Explicador> criadoExplicador = this.explicadorService.criarExplicador(explicador);
+        Optional<ExplicadorDTO> criadoExplicador = this.explicadorService.criarExplicadorUniversidade(explicadorDTO, nomeUniversidade);
 
         if(criadoExplicador.isPresent()){
-
             return ResponseEntity.ok(criadoExplicador.get());
         }
 
-        throw new FalhaCriarException("O explicador com o nome: " + explicador.getNome() + " ja existe!");
+        throw new FalhaCriarException("O explicador com o nome: " + explicadorDTO.getNome() + " ja existe!");
     }
 }

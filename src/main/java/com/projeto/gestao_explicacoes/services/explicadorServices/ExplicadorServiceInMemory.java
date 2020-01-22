@@ -1,6 +1,6 @@
 package com.projeto.gestao_explicacoes.services.explicadorServices;
 
-import com.projeto.gestao_explicacoes.models.Explicador;
+import com.projeto.gestao_explicacoes.models.DTO.ExplicadorDTO;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +12,7 @@ import java.util.Optional;
 public class ExplicadorServiceInMemory implements ExplicadorService {
 
     @Override
-    public Optional<Explicador> criarExplicador(Explicador explicador) {
-
+    public Optional<ExplicadorDTO> criarExplicadorUniversidade(ExplicadorDTO explicadorDTO, String nomeUniversidade) {
         return Optional.empty();
     }
 

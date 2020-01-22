@@ -1,16 +1,14 @@
 package com.projeto.gestao_explicacoes.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Horario extends BaseModel{
@@ -21,10 +19,9 @@ public class Horario extends BaseModel{
   @DateTimeFormat(pattern = "HH:mm")
   private LocalTime horaFim;
 
-  @ManyToOne
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  @JsonBackReference
+  @JsonIgnore
   private Explicador explicador; // adicionado em "Explicador"
 
   // ****** METHODS ******
