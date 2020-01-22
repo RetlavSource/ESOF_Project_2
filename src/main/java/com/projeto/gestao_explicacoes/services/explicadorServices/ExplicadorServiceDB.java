@@ -102,6 +102,36 @@ public class ExplicadorServiceDB implements ExplicadorService {
     }
 
     /**
+     * Modifica um explicador em todas as faculdades que esteja presente.
+     *
+     * @param explicadorDTO dto com as informações do explicador
+     * @return dto do explicador modificado
+     */
+    @Override
+    public Optional<ExplicadorDTO> modificaExplicadorTodas(ExplicadorDTO explicadorDTO) {
+        this.logger.info("No método: ExplicadorServiceDB -> modificaExplicadorTodas()");
+
+        Optional<ExplicadorDTO> explicadorResposta = Optional.empty();
+
+        for (Universidade universidade : this.universidadeRepo.findAll()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(universidade.getUrl()).append("/explicador");
+            String fullUrl = sb.toString();
+
+            try {
+                ResponseEntity<ExplicadorDTO> auxExplicadorDTO = WebService.byPut(explicadorDTO, fullUrl, ExplicadorDTO.class);
+                System.out.println(auxExplicadorDTO.getBody());
+                this.logger.info("Explicador modificado na Universidade com a sigla: " +universidade.getSigla()+ " !!");
+                explicadorResposta = Optional.ofNullable(auxExplicadorDTO.getBody());
+            } catch (HttpClientErrorException exc) {
+                this.logger.info("O explicador não foi modificado na Universidade com a sigla: " +universidade.getSigla()+ " !!");
+            }
+        }
+
+        return explicadorResposta;
+    }
+
+    /**
      * Modifica um explicador de uma faculdade.
      *
      * @param explicadorDTO dto com as informações do explicador
@@ -165,6 +195,5 @@ public class ExplicadorServiceDB implements ExplicadorService {
         }
 
     }
-
 
 }

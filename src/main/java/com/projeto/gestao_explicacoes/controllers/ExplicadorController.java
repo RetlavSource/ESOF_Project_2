@@ -32,7 +32,7 @@ public class ExplicadorController {
      *
      * @param nomeUniversidade sigla da universidade
      * @param parametros capturados no url
-     * @return
+     * @return string em formato json com os explicadores
      */
     @GetMapping(value = "/{universidade}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getExplicadoresUniversidade(@PathVariable("universidade") String nomeUniversidade, @RequestParam Map<String, String> parametros) {
@@ -63,6 +63,25 @@ public class ExplicadorController {
     }
 
     /**
+     * Modifica um explicador em todas as faculdades que esteja presente.
+     *
+     * @param explicadorDTO dto com os dados do explicador
+     * @return dto com o explicador modificado
+     */
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ExplicadorDTO> putExplicadorTodas(@RequestBody ExplicadorDTO explicadorDTO){
+        this.logger.info("Recebido um pedido PUT em putExplicadorTodas()");
+
+        Optional<ExplicadorDTO> explicadorModificado = this.explicadorService.modificaExplicadorTodas(explicadorDTO);
+
+        if(explicadorModificado.isPresent()){
+            return ResponseEntity.ok(explicadorModificado.get());
+        }
+
+        throw new FalhaCriarException("Falha ao modificar as disponibilidades do explicador nas Universidades!");
+    }
+
+    /**
      * Modifica um explicador de uma faculdade.
      *
      * @param explicadorDTO dto com os dados do explicador
@@ -71,7 +90,7 @@ public class ExplicadorController {
      */
     @PutMapping(value = "/{universidade}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ExplicadorDTO> putExplicadorUniversidade(@RequestBody ExplicadorDTO explicadorDTO, @PathVariable("universidade") String nomeUniversidade){
-        this.logger.info("Recebido um pedido POST em createExplicadorUniversidade()");
+        this.logger.info("Recebido um pedido PUT em createExplicadorUniversidade()");
 
         Optional<ExplicadorDTO> explicadorModificado = this.explicadorService.modificaExplicadorUniversidade(explicadorDTO, nomeUniversidade);
 
@@ -92,7 +111,7 @@ public class ExplicadorController {
      */
     @PutMapping(value = "/{universidade}/{cadeira}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ExplicadorDTO> putExplicadorUniversidadeCadeira(@RequestBody ExplicadorDTO explicadorDTO, @PathVariable("universidade") String nomeUniversidade, @PathVariable("cadeira") String nomeCadeira){
-        this.logger.info("Recebido um pedido POST em putExplicadorUniversidadeCadeira()");
+        this.logger.info("Recebido um pedido PUT em putExplicadorUniversidadeCadeira()");
 
         Optional<ExplicadorDTO> explicadorModificado = this.explicadorService.modificaExplicadorUniversidadeCadeira(explicadorDTO, nomeUniversidade, nomeCadeira);
 
