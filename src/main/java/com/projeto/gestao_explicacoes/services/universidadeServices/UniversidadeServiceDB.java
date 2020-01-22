@@ -49,6 +49,12 @@ public class UniversidadeServiceDB implements UniversidadeService {
         return universidades;
     }
 
+    /**
+     * Cria uma universidade e preenche os seus dados via web api.
+     *
+     * @param universidadeDTO dados da universidade a criar
+     * @return dto da universidade criada
+     */
     @Override
     public Optional<UniversidadeDTO> criarUniversidade(UniversidadeDTO universidadeDTO) {
         this.logger.info("No método: UniversidadeServiceDB -> criarUniversidade()");

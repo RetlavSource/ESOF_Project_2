@@ -6,15 +6,13 @@ import com.projeto.gestao_explicacoes.models.Universidade;
 import com.projeto.gestao_explicacoes.models.builders.WebService;
 import com.projeto.gestao_explicacoes.repositories.ExplicadorRepo;
 import com.projeto.gestao_explicacoes.repositories.UniversidadeRepo;
-import com.projeto.gestao_explicacoes.services.explicadorServices.filters.FilterObjectExplicador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Profile(value = "db")
@@ -30,15 +28,6 @@ public class ExplicadorServiceDB implements ExplicadorService {
     }
 
     @Override
-    public Set<Explicador> findAll() {
-        Set<Explicador> explicadores = new HashSet<>();
-        for (Explicador explicador : this.explicadorRepo.findAll()) {
-            explicadores.add(explicador);
-        }
-        return explicadores;
-    }
-
-    @Override
     public Optional<Explicador> criarExplicador(Explicador explicador) {
 
         if(this.explicadorRepo.findByNumero(explicador.getNumero()).isPresent()){
@@ -51,24 +40,18 @@ public class ExplicadorServiceDB implements ExplicadorService {
         return Optional.of(explicadorCriado);
     }
 
+    /**
+     * Procura um explicador, numa faculdade, por diversos parâmetros, utilizando filtros.
+     *
+     * @param parametros a pesquisar
+     * @param nomeUniversidade nome da faculdade
+     * @return explicadores encontrados
+     */
     @Override
-    public Set findExplicadorByUniversidade(String nomeUniversidade) {
-        Optional<Universidade> universidade = this.universidadeRepo.findBySigla(nomeUniversidade);
-        if (universidade.isEmpty()) {
-            throw new FalhaCriarException("Não existe a faculdade pedida!!");
-        }
+    public String procuraExplicadoresUniversidade(Map<String, String> parametros, String nomeUniversidade) {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(universidade.get().getUrl()).append("/explicador");
-        String fullUrl = sb.toString();
-
-        ResponseEntity<Set> auxSetExplicadores = WebService.byGet(fullUrl, Set.class);
-
-        return auxSetExplicadores.getBody();
-    }
-
-    @Override
-    public Set procuraExplicadorDisponivelByUniversidade(FilterObjectExplicador filterObjectExplicador, String nomeUniversidade) {
+        System.out.println(parametros);
+        System.out.println(nomeUniversidade);
 
         Optional<Universidade> universidade = this.universidadeRepo.findBySigla(nomeUniversidade);
         if (universidade.isEmpty()) {
@@ -77,22 +60,21 @@ public class ExplicadorServiceDB implements ExplicadorService {
 
         StringBuilder sb = new StringBuilder();
         sb.append(universidade.get().getUrl()).append("/explicador").append("?");
-        sb.append("cadeira=").append(filterObjectExplicador.getNomeCadeira());
+        sb.append("cadeira=").append(parametros.get("cadeira"));
         sb.append("&");
-        sb.append("idioma=").append(filterObjectExplicador.getNomeIdioma());
+        sb.append("idioma=").append(parametros.get("idioma"));
         sb.append("&");
-        sb.append("dia=").append(filterObjectExplicador.getDiaSemana());
+        sb.append("dia=").append(parametros.get("dia"));
         sb.append("&");
-        sb.append("inicio=").append(filterObjectExplicador.getHoraInicio());
+        sb.append("inicio=").append(parametros.get("inicio"));
         sb.append("&");
-        sb.append("fim=").append(filterObjectExplicador.getHoraInicio());
+        sb.append("fim=").append(parametros.get("fim"));
 
         String fullUrl = sb.toString();
 
         System.out.println(fullUrl);
 
-        ResponseEntity<Set> auxSetExplicadores = WebService.byGet(fullUrl, Set.class);
-
+        ResponseEntity<String> auxSetExplicadores = WebService.byGet(fullUrl, String.class);
 
         return auxSetExplicadores.getBody();
     }

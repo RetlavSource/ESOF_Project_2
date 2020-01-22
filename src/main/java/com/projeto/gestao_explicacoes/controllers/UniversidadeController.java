@@ -2,8 +2,6 @@ package com.projeto.gestao_explicacoes.controllers;
 
 import com.projeto.gestao_explicacoes.exceptions.FalhaCriarException;
 import com.projeto.gestao_explicacoes.models.DTO.UniversidadeDTO;
-import com.projeto.gestao_explicacoes.models.Universidade;
-import com.projeto.gestao_explicacoes.models.mappers.OpenStreetMapper;
 import com.projeto.gestao_explicacoes.services.universidadeServices.UniversidadeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +47,7 @@ public class UniversidadeController {
             return ResponseEntity.ok(optUniversidade.get());
         }
 
-        throw new FalhaCriarException("Faculdade com o nome: "+ universidadeDTO.getNome() + "já existe!!");
+        throw new FalhaCriarException("Faculdade com o nome: "+ universidadeDTO.getNome() + " já existe!!");
     }
 
 }
