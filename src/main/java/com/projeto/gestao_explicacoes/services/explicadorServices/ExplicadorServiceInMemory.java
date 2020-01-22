@@ -26,4 +26,9 @@ public class ExplicadorServiceInMemory implements ExplicadorService {
         return Optional.empty();
     }
 
+    @Override
+    public Optional<ExplicadorDTO> modificaExplicadorUniversidadeCadeira(ExplicadorDTO explicadorDTO, String nomeUniversidade, String nomeCadeira) {
+        return Optional.empty();
+    }
+
 }

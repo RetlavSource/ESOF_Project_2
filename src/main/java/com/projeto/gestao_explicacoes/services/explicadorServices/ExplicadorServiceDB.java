@@ -101,6 +101,13 @@ public class ExplicadorServiceDB implements ExplicadorService {
         return auxSetExplicadores.getBody();
     }
 
+    /**
+     * Modifica um explicador de uma faculdade.
+     *
+     * @param explicadorDTO dto com as informações do explicador
+     * @param nomeUniversidade string com a sigla da universidade
+     * @return dto do explicador modificado
+     */
     @Override
     public Optional<ExplicadorDTO> modificaExplicadorUniversidade(ExplicadorDTO explicadorDTO, String nomeUniversidade) {
         this.logger.info("No método: ExplicadorServiceDB -> modificaExplicadorUniversidade()");
@@ -125,5 +132,39 @@ public class ExplicadorServiceDB implements ExplicadorService {
         }
 
     }
+
+    /**
+     * Associa uma cadeira a um explicador, de uma faculdade.
+     *
+     * @param explicadorDTO dto com os dados do explicador
+     * @param nomeUniversidade string com a sigla da universidade
+     * @param nomeCadeira nome da cadeira
+     * @return dto do explicador modificado
+     */
+    @Override
+    public Optional<ExplicadorDTO> modificaExplicadorUniversidadeCadeira(ExplicadorDTO explicadorDTO, String nomeUniversidade, String nomeCadeira) {
+        this.logger.info("No método: ExplicadorServiceDB -> modificaExplicadorUniversidadeCadeira()");
+
+        Optional<Universidade> universidade = this.universidadeRepo.findBySigla(nomeUniversidade);
+        if (universidade.isEmpty()) {
+            throw new FalhaCriarException("Não existe a universidade indicada!!");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(universidade.get().getUrl()).append("/explicador").append("/").append(nomeCadeira);
+        String fullUrl = sb.toString();
+
+        try {
+            ResponseEntity<ExplicadorDTO> auxExplicadorDTO = WebService.byPut(explicadorDTO, fullUrl, ExplicadorDTO.class);
+            System.out.println(auxExplicadorDTO.getBody());
+            this.logger.info("Explicador modificado!!");
+            return Optional.ofNullable(auxExplicadorDTO.getBody());
+        } catch (HttpClientErrorException exc) {
+            this.logger.info("O explicador não foi modificado!!");
+            throw new FalhaCriarException("O explicador não foi modificado!!");
+        }
+
+    }
+
 
 }

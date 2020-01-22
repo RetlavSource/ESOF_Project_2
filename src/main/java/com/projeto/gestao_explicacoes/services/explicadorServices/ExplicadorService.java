@@ -12,4 +12,6 @@ public interface ExplicadorService {
     String procuraExplicadoresUniversidade(Map<String, String> parametros, String nomeUniversidade);
 
     Optional<ExplicadorDTO> modificaExplicadorUniversidade(ExplicadorDTO explicadorDTO, String nomeUniversidade);
+
+    Optional<ExplicadorDTO> modificaExplicadorUniversidadeCadeira(ExplicadorDTO explicadorDTO, String nomeUniversidade, String nomeCadeira);
 }

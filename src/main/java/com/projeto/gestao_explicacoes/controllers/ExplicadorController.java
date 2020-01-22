@@ -81,4 +81,25 @@ public class ExplicadorController {
 
         throw new FalhaCriarException("Falha ao modificar as disponibilidades do explicador!");
     }
+
+    /**
+     * Associa uma cadeira a um explicador, de uma faculdade.
+     *
+     * @param explicadorDTO dto com os dados do explicador
+     * @param nomeUniversidade sigla da universidade
+     * @param nomeCadeira nome da cadeira
+     * @return dto com o explicador modificado
+     */
+    @PutMapping(value = "/{universidade}/{cadeira}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ExplicadorDTO> putExplicadorUniversidadeCadeira(@RequestBody ExplicadorDTO explicadorDTO, @PathVariable("universidade") String nomeUniversidade, @PathVariable("cadeira") String nomeCadeira){
+        this.logger.info("Recebido um pedido POST em putExplicadorUniversidadeCadeira()");
+
+        Optional<ExplicadorDTO> explicadorModificado = this.explicadorService.modificaExplicadorUniversidadeCadeira(explicadorDTO, nomeUniversidade, nomeCadeira);
+
+        if(explicadorModificado.isPresent()){
+            return ResponseEntity.ok(explicadorModificado.get());
+        }
+
+        throw new FalhaCriarException("Falha ao associar a cadeira do explicador!!");
+    }
 }
