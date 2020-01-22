@@ -62,6 +62,29 @@ public class ExplicadorServiceDB implements ExplicadorService {
     }
 
     /**
+     * Pesquisa os explicadores em todas as universidade por parâmetros.
+     *
+     * @param parametros capturados no url
+     * @return explicadores encontrados
+     */
+    @Override
+    public String procuraExplicadoresTodos(Map<String, String> parametros) {
+        this.logger.info("No método: ExplicadorServiceDB -> procuraExplicadoresTodos()");
+
+        StringBuilder sbTodos = new StringBuilder();
+
+        for (Universidade universidade : this.universidadeRepo.findAll()) {
+            this.logger.info("A pesquisar na Universidade com a sigla: " + universidade.getSigla() + " !!");
+
+            String procura = this.procuraExplicadoresUniversidade(parametros, universidade.getSigla());
+            sbTodos.append(procura);
+        }
+
+        this.logger.info("A devolver todos os resultados !!");
+        return sbTodos.toString();
+    }
+
+    /**
      * Procura um explicador, numa faculdade, por diversos parâmetros, utilizando filtros.
      *
      * @param parametros a pesquisar
@@ -96,9 +119,38 @@ public class ExplicadorServiceDB implements ExplicadorService {
 
         System.out.println(fullUrl);
 
-        ResponseEntity<String> auxSetExplicadores = WebService.byGet(fullUrl, String.class);
+        try {
+            ResponseEntity<String> auxSetExplicadores = WebService.byGet(fullUrl, String.class);
+            return auxSetExplicadores.getBody();
+        } catch (Exception e) {
+            this.logger.info("HTTP Exception: " + e.toString());
+            return "";
+        }
+    }
 
-        return auxSetExplicadores.getBody();
+    @Override
+    public String procuraExplicadorUniversidadeNome(String nomeUniversidade, String nomeExplicador) {
+        this.logger.info("No método: ExplicadorServiceDB -> procuraExplicadorUniversidadeNome()");
+
+        Optional<Universidade> universidade = this.universidadeRepo.findBySigla(nomeUniversidade);
+        if (universidade.isEmpty()) {
+            throw new FalhaCriarException("Não existe a universidade indicada!!");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(universidade.get().getUrl()).append("/explicador").append("/").append(nomeExplicador);
+
+        String fullUrl = sb.toString();
+
+        System.out.println(fullUrl);
+
+        try {
+            ResponseEntity<String> auxGetExplicador = WebService.byGet(fullUrl, String.class);
+            return auxGetExplicador.getBody();
+        } catch (Exception e) {
+            this.logger.info("HTTP Exception: " + e.toString());
+            return "";
+        }
     }
 
     /**

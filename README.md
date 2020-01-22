@@ -9,14 +9,17 @@ Este é o completento do projeto prático [*`ESOF_Project`*](https://github.com/
 ## Endpoints utilizados
 *   **GET**
     *   /explicador/{universidade} -- *`lista todos os explicadores da {universidade}`*
-    *   /explicador/{nome}/{universidade} -- *`lista o explicador com o {nome} da {universidade}`*
+    *   /explicador/{universidade}/{nome} -- *`lista o explicador com o {nome} da {universidade}`*
+    *   /universidade -- *`lista uma universidade`*
 
 *   **POST**
     *   /explicador/{universidade} -- *`cria um explicador na {universidade} (info do explicador no payload)`*
+    *   /universidade -- *`cria uma universidade`*
+    *   /atendimento/{universidade} -- *`cria um atendimento na {universidade} (info do atendimento no payload)`*
 
 *   **PUT**
     *   /explicador -- *`define a disponibilidade do explicador (itera pelas faculdades à procura)(info do explicador no payload)`*
-    *   /explicador/{universidade}/{curso} -- *`atribui um curso a um explicador da {universidade} (info do explicador no payload)`*
+    *   /explicador/{universidade}/{cadeira} -- *`atribui uma cadeira a um explicador da {universidade} (info do explicador no payload)`*
     *   /explicador/{universidade} -- *`modifica o explicador da {universidade} (info do explicador no payload)`*
     
 *   **DELETE**

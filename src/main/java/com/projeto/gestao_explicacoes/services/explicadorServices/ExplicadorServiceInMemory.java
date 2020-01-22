@@ -17,7 +17,17 @@ public class ExplicadorServiceInMemory implements ExplicadorService {
     }
 
     @Override
+    public String procuraExplicadoresTodos(Map<String, String> parametros) {
+        return null;
+    }
+
+    @Override
     public String procuraExplicadoresUniversidade(Map<String, String> parametros, String nomeUniversidade) {
+        return null;
+    }
+
+    @Override
+    public String procuraExplicadorUniversidadeNome(String nomeUniversidade, String nomeExplicador) {
         return null;
     }
 

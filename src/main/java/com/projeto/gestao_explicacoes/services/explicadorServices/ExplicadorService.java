@@ -7,9 +7,13 @@ import java.util.Optional;
 
 public interface ExplicadorService {
 
-    Optional<ExplicadorDTO> criarExplicadorUniversidade(ExplicadorDTO explicadorDTO, String nomeUniversidade);
+    String procuraExplicadoresTodos(Map<String, String> parametros);
 
     String procuraExplicadoresUniversidade(Map<String, String> parametros, String nomeUniversidade);
+
+    String procuraExplicadorUniversidadeNome(String nomeUniversidade, String nomeExplicador);
+
+    Optional<ExplicadorDTO> criarExplicadorUniversidade(ExplicadorDTO explicadorDTO, String nomeUniversidade);
 
     Optional<ExplicadorDTO> modificaExplicadorTodas(ExplicadorDTO explicadorDTO);
 

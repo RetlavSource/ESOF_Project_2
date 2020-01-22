@@ -28,6 +28,19 @@ public class ExplicadorController {
     }
 
     /**
+     * Pesquisa os explicadores em todas as universidade por parâmetros.
+     *
+     * @param parametros capturados no url
+     * @return string em formato json com os explicadores
+     */
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getExplicadoresTodos(@RequestParam Map<String, String> parametros) {
+        this.logger.info("Recebido um pedido GET em getExplicadoresTodos()");
+
+        return ResponseEntity.ok(this.explicadorService.procuraExplicadoresTodos(parametros));
+    }
+
+    /**
      * Pesquisa os explicadores numa determinada universidade por parâmetros.
      *
      * @param nomeUniversidade sigla da universidade
@@ -38,8 +51,14 @@ public class ExplicadorController {
     public ResponseEntity<String> getExplicadoresUniversidade(@PathVariable("universidade") String nomeUniversidade, @RequestParam Map<String, String> parametros) {
         this.logger.info("Recebido um pedido GET em getExplicadoresUniversidade()");
 
-
         return ResponseEntity.ok(this.explicadorService.procuraExplicadoresUniversidade(parametros, nomeUniversidade));
+    }
+
+    @GetMapping(value = "/{universidade}/{nome}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getExplicadorUniversidadeNome(@PathVariable("universidade") String nomeUniversidade, @PathVariable("nome") String nomeExplicador) {
+        this.logger.info("Recebido um pedido GET em getExplicadoresUniversidade()");
+
+        return ResponseEntity.ok(this.explicadorService.procuraExplicadorUniversidadeNome(nomeUniversidade, nomeExplicador));
     }
 
     /**
