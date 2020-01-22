@@ -1,11 +1,11 @@
 package com.projeto.gestao_explicacoes.services.atendimentoServices;
 
-import com.projeto.gestao_explicacoes.models.Atendimento;
+import com.projeto.gestao_explicacoes.models.DTO.AtendimentoDTO;
 
-import java.util.Set;
+import java.util.Optional;
 
 public interface AtendimentoService {
 
-    Set<Atendimento> findAll();
+    Optional<AtendimentoDTO> criarAtendimentoUniversidade(AtendimentoDTO atendimentoDTO, String nomeUniversidade);
 
 }

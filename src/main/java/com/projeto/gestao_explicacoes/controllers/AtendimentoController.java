@@ -1,8 +1,8 @@
 package com.projeto.gestao_explicacoes.controllers;
 
-import com.projeto.gestao_explicacoes.models.Atendimento;
+import com.projeto.gestao_explicacoes.exceptions.FalhaCriarException;
+import com.projeto.gestao_explicacoes.models.DTO.AtendimentoDTO;
 import com.projeto.gestao_explicacoes.services.atendimentoServices.AtendimentoService;
-import com.projeto.gestao_explicacoes.services.atendimentoServices.filters.AtendimentoObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.format.DateTimeFormatter;
-import java.util.Set;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/atendimento")
@@ -27,25 +26,23 @@ public class AtendimentoController {
         this.atendimentoService = atendimentoService;
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Set<Atendimento>> getAllAtendimentos() {
-        this.logger.info("Recebido um pedido GET");
+    /**
+     * Cria um atendimento numa determinada faculdade.
+     *
+     * @param atendimentoDTO dto que recebe os dados do atendimento
+     * @param nomeUniversidade string com a sigla da universidade
+     * @return dto do atendimento criado
+     */
+    @PostMapping(value = "/{universidade}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AtendimentoDTO> createAtendimentoUniversidade(@RequestBody AtendimentoDTO atendimentoDTO, @PathVariable("universidade") String nomeUniversidade) {
+        this.logger.info("Recebido um pedido POST em createAtendimentoUniversidade()");
 
-        return ResponseEntity.ok(this.atendimentoService.findAll());
-    }
+        Optional<AtendimentoDTO> criadoAtendimento = this.atendimentoService.criarAtendimentoUniversidade(atendimentoDTO, nomeUniversidade);
 
-    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AtendimentoObject> createAtendimento(@RequestBody AtendimentoObject objatendimento) {
-        this.logger.info("Recebido um pedido POST");
+        if (criadoAtendimento.isPresent()) {
+            return ResponseEntity.ok(criadoAtendimento.get());
+        }
 
-
-        System.out.println(objatendimento.getData());
-        System.out.println(objatendimento.getData().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
-        System.out.println(objatendimento.getNomeExplicador());
-        System.out.println(objatendimento.getNomeAluno());
-        System.out.println(objatendimento.getNomeCadeira());
-        System.out.println(objatendimento.getNomeIdioma());
-
-        return ResponseEntity.ok(objatendimento);
+        throw new FalhaCriarException("O atendimento entre o explicador " + atendimentoDTO.getNomeExplicador() + " e o aluno " + atendimentoDTO.getNomeAluno() + " na data " + atendimentoDTO.getData() + " nao foi criado com sucesso!");
     }
 }
