@@ -10,4 +10,6 @@ public interface ExplicadorService {
     Optional<ExplicadorDTO> criarExplicadorUniversidade(ExplicadorDTO explicadorDTO, String nomeUniversidade);
 
     String procuraExplicadoresUniversidade(Map<String, String> parametros, String nomeUniversidade);
+
+    Optional<ExplicadorDTO> modificaExplicadorUniversidade(ExplicadorDTO explicadorDTO, String nomeUniversidade);
 }

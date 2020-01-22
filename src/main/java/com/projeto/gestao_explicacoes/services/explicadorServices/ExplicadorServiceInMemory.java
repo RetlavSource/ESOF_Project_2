@@ -20,4 +20,10 @@ public class ExplicadorServiceInMemory implements ExplicadorService {
     public String procuraExplicadoresUniversidade(Map<String, String> parametros, String nomeUniversidade) {
         return null;
     }
+
+    @Override
+    public Optional<ExplicadorDTO> modificaExplicadorUniversidade(ExplicadorDTO explicadorDTO, String nomeUniversidade) {
+        return Optional.empty();
+    }
+
 }

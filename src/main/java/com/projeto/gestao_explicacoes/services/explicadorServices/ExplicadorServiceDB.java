@@ -29,6 +29,13 @@ public class ExplicadorServiceDB implements ExplicadorService {
         this.universidadeRepo = universidadeRepo;
     }
 
+    /**
+     * Cria um explicador numa universidade.
+     *
+     * @param explicadorDTO dto com os dados do explicador
+     * @param nomeUniversidade string com a sigla da universidade
+     * @return dto do explicador se criado
+     */
     @Override
     public Optional<ExplicadorDTO> criarExplicadorUniversidade(ExplicadorDTO explicadorDTO, String nomeUniversidade) {
         this.logger.info("No método: ExplicadorServiceDB -> criarExplicadorUniversidade()");
@@ -92,6 +99,31 @@ public class ExplicadorServiceDB implements ExplicadorService {
         ResponseEntity<String> auxSetExplicadores = WebService.byGet(fullUrl, String.class);
 
         return auxSetExplicadores.getBody();
+    }
+
+    @Override
+    public Optional<ExplicadorDTO> modificaExplicadorUniversidade(ExplicadorDTO explicadorDTO, String nomeUniversidade) {
+        this.logger.info("No método: ExplicadorServiceDB -> modificaExplicadorUniversidade()");
+
+        Optional<Universidade> universidade = this.universidadeRepo.findBySigla(nomeUniversidade);
+        if (universidade.isEmpty()) {
+            throw new FalhaCriarException("Não existe a universidade indicada!!");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(universidade.get().getUrl()).append("/explicador");
+        String fullUrl = sb.toString();
+
+        try {
+            ResponseEntity<ExplicadorDTO> auxExplicadorDTO = WebService.byPut(explicadorDTO, fullUrl, ExplicadorDTO.class);
+            System.out.println(auxExplicadorDTO.getBody());
+            this.logger.info("Explicador modificado!!");
+            return Optional.ofNullable(auxExplicadorDTO.getBody());
+        } catch (HttpClientErrorException exc) {
+            this.logger.info("O explicador não foi modificado!!");
+            throw new FalhaCriarException("O explicador não foi modificado!!");
+        }
+
     }
 
 }

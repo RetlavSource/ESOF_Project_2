@@ -2,6 +2,7 @@ package com.projeto.gestao_explicacoes.models.builders;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -52,7 +53,9 @@ public class WebService {
     }
 
     /**
-     * Modifica um novo recurso, fazendo PATCH ao objeto fornecido na URL e devolve o objeto modificado na resposta.
+     * Modifica um novo recurso, fazendo PUT ao objeto fornecido na URL através
+     * do método exchange como {@code HttpMethod.PUT}, possibilitando
+     * uma resposta , em que é devolvido o objeto modificado na resposta.
      *
      * @param body o payload da entidade a enviar
      * @param url o  URL
@@ -60,7 +63,7 @@ public class WebService {
      * @param <T> o tipo de objeto utilizado
      * @return o objeto convertido
      */
-    public static <T> T byPut(T body, String url, Class<T> responseType) {
+    public static <T> ResponseEntity<T> byPut(T body, String url, Class<T> responseType) {
         if (restTemplate == null) {
             restTemplate = new RestTemplate();
         }
@@ -70,7 +73,7 @@ public class WebService {
 
         HttpEntity<T> payload = new HttpEntity<>(body, httpHeaders);
 
-        return restTemplate.patchForObject(url, payload, responseType);
+        return restTemplate.exchange(url, HttpMethod.PUT, payload, responseType);
 
     }
 

@@ -42,6 +42,13 @@ public class ExplicadorController {
         return ResponseEntity.ok(this.explicadorService.procuraExplicadoresUniversidade(parametros, nomeUniversidade));
     }
 
+    /**
+     * Cria um explicador numa universidade.
+     *
+     * @param explicadorDTO dto do explicador passado por POST, no payload
+     * @param nomeUniversidade sigla da universidade
+     * @return dto do explicador, se criado
+     */
     @PostMapping(value = "/{universidade}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ExplicadorDTO> createExplicadorUniversidade(@RequestBody ExplicadorDTO explicadorDTO, @PathVariable("universidade") String nomeUniversidade){
         this.logger.info("Recebido um pedido POST em createExplicadorUniversidade()");
@@ -53,5 +60,25 @@ public class ExplicadorController {
         }
 
         throw new FalhaCriarException("O explicador com o nome: " + explicadorDTO.getNome() + " ja existe!");
+    }
+
+    /**
+     * Modifica um explicador de uma faculdade.
+     *
+     * @param explicadorDTO dto com os dados do explicador
+     * @param nomeUniversidade sigla da universidade
+     * @return dto com o explicador modificado
+     */
+    @PutMapping(value = "/{universidade}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ExplicadorDTO> putExplicadorUniversidade(@RequestBody ExplicadorDTO explicadorDTO, @PathVariable("universidade") String nomeUniversidade){
+        this.logger.info("Recebido um pedido POST em createExplicadorUniversidade()");
+
+        Optional<ExplicadorDTO> explicadorModificado = this.explicadorService.modificaExplicadorUniversidade(explicadorDTO, nomeUniversidade);
+
+        if(explicadorModificado.isPresent()){
+            return ResponseEntity.ok(explicadorModificado.get());
+        }
+
+        throw new FalhaCriarException("Falha ao modificar as disponibilidades do explicador!");
     }
 }
